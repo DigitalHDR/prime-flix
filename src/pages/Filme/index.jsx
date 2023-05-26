@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import './style.css'
 
 import api from '../../services/api'
 
 const Filme = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
+
   const [filme, setFilme] = useState({})
   const [loading, setLoading] = useState(true)
 
@@ -20,10 +22,13 @@ const Filme = () => {
         })
         .then(response => {
           setFilme(response.data)
+          // console.log(response.data);
           setLoading(false)
         })
         .catch(() => {
           console.log('Filme não encontrado')
+          navigate('/', {replace: true})
+          return
         })
     }
 
@@ -32,7 +37,9 @@ const Filme = () => {
     return () => {
       console.log('COMPONENTE FOI DESMONTADO')
     }
-  }, [])
+  }, [navigate, id]) 
+  // dentro do [] useEffect usa-se as dependencia que
+  // estão sendo usadas fora dele que estão dentro dele
 
   if (loading) {
     return (
@@ -56,7 +63,7 @@ const Filme = () => {
       <div className='area-buttons'>
         <button>Salvar</button>
         <button>
-          <a href="#">
+          <a target='_blank' rel='external' href={`https://www.youtube.com/results?search_query=${filme.title} treiler`}>
             Treiler
           </a>
         </button>
