@@ -27,7 +27,7 @@ const Filme = () => {
         })
         .catch(() => {
           console.log('Filme não encontrado')
-          navigate('/', {replace: true})
+          navigate('/', { replace: true })
           return
         })
     }
@@ -37,9 +37,30 @@ const Filme = () => {
     return () => {
       console.log('COMPONENTE FOI DESMONTADO')
     }
-  }, [navigate, id]) 
+  }, [navigate, id])
   // dentro do [] useEffect usa-se as dependencia que
   // estão sendo usadas fora dele que estão dentro dele
+
+  function salvarFilme() {
+    const minhasLista = localStorage.getItem('@primeflix')
+
+    let filmesSalvos = JSON.parse(minhasLista) || []
+    // JSON.parse para converter em string novamente pois vem em json
+
+    // const hasFilme = filmesSalvos.find((filmesSalvo) => filmesSalvo.id === filme.id)
+    const hasFilme = filmesSalvos.some(
+      filmesSalvo => filmesSalvo.id === filme.id
+    )
+
+    if (hasFilme) {
+      alert('esse filme já está na lista')
+      return
+    }
+
+    filmesSalvos.push(filme)
+    localStorage.setItem('@primeflix', JSON.stringify(filmesSalvos))
+    alert('Filme salvo com sucesso!')
+  }
 
   if (loading) {
     return (
@@ -60,10 +81,14 @@ const Filme = () => {
       <span>{filme.overview}</span>
       <strong>Avaliação: {filme.vote_average}</strong>
 
-      <div className='area-buttons'>
-        <button>Salvar</button>
+      <div className="area-buttons">
+        <button onClick={salvarFilme}>Salvar</button>
         <button>
-          <a target='_blank' rel='external' href={`https://www.youtube.com/results?search_query=${filme.title} treiler`}>
+          <a
+            target="_blank"
+            rel="external"
+            href={`https://www.youtube.com/results?search_query=${filme.title} treiler`}
+          >
             Treiler
           </a>
         </button>
