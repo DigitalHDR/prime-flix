@@ -86,7 +86,7 @@ const Filme = () => {
         <button>
           <a
             target="_blank"
-            rel="external"
+            rel="noreferrer"
             href={`https://www.youtube.com/results?search_query=${filme.title} treiler`}
           >
             Treiler
